@@ -1,0 +1,10 @@
+HTTP/1.1 200 OK
+Date: Mon, 25 Aug 2025 12:32:30 GMT
+Server: WSGIServer/0.2 CPython/3.12.7
+Content-Type: text/html; charset=utf-8
+X-Frame-Options: DENY
+Content-Length: 224
+X-Content-Type-Options: nosniff
+Referrer-Policy: same-origin
+Cross-Origin-Opener-Policy: same-origin
+

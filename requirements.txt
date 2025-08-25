@@ -1,0 +1,4 @@
+django
+django-environ
+django-csp
+django-sslserver
