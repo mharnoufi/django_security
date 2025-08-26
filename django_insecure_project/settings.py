@@ -35,6 +35,14 @@ SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True # False si sous domaine en HTTP
 SECURE_SSL_PRELOAD = False # True en prod si 100% HTTPS
 
+#Protection contre le MIME sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Contrôle du header Referer
+SECURE_CONTENT_TYPE_NOSNIFF = "strict-origin-when-cross-origin"
+
+# Protection contre le clickjacking
+X_FRAME_OPTIONS = "DENY"
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent

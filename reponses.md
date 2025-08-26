@@ -5,3 +5,7 @@
 Debug a false en prod :
 Avec DEBUG=True, Django affiche les pages d’erreurs détaillées 
 (stack trace, variables de contexte, chemins du serveur, configuration, parfois même la SECRET_KEY
+
+# Protection contre le clickjacking
+clickjacking = site malveillant qui charge le site dans une iframe caché et place des boutons/image/pub par dessus
+X_FRAME_OPTIONS = "DENY" -> interdit à notre site d'etre affiché dans une <iframe>
