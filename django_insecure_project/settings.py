@@ -28,7 +28,13 @@ CSRF_COOKIE_HTTPONLY = True
 # CSRF (défaut raisonnable)
 SESSION_COOKIE_SAMESITE = "Lax"  # adapte si besoin (iframe/OAuth)
 CSRF_COOKIE_SAMESITE = "Lax"
-# CSRF_TRUSTED_ORIGINS = ["https://ton-domaine.tld"]
+
+#HTTPS et HSTS 
+SECURE_SSL_REDIRECT = DJANGO_SECURE
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True # False si sous domaine en HTTP
+SECURE_SSL_PRELOAD = False # True en prod si 100% HTTPS
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
