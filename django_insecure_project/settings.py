@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 from csp.constants import SELF
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Variable pour activer le mode sécurisé
 DJANGO_SECURE = os.getenv("DJANGO_SECURE","false").lower() == "true"
@@ -32,9 +35,9 @@ CSRF_COOKIE_SAMESITE = "Lax"
 
 # HTTPS et HSTS 
 SECURE_SSL_REDIRECT = DJANGO_SECURE
-SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_SECONDS = 31536000 if DJANGO_SECURE else 0
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True # False si sous domaine en HTTP
-SECURE_HSTS_PRELOAD = False # True en prod si 100% HTTPS
+SECURE_HSTS_PRELOAD = DJANGO_SECURE # True en prod si 100% HTTPS
 
 # Protection contre le MIME sniffing
 SECURE_CONTENT_TYPE_NOSNIFF = True
@@ -66,7 +69,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-nq6pf3@^mc#!-s#+^7@bbvdr^gr#2a)wvgt1qs40c*ibhld0-%"
+SECRET_KEY = os.getenv("SECRET_KEY", "dev-only-insecure-key")
 
 # Application definition
 
@@ -83,8 +86,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "csp.middleware.CSPMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -98,7 +101,7 @@ ROOT_URLCONF = "django_insecure_project.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
