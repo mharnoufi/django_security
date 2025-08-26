@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+from csp.constants import SELF
 
 # Variable pour activer le mode sécurisé
 DJANGO_SECURE = os.getenv("DJANGO_SECURE","false").lower() == "true"
@@ -29,20 +30,33 @@ CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"  # adapte si besoin (iframe/OAuth)
 CSRF_COOKIE_SAMESITE = "Lax"
 
-#HTTPS et HSTS 
+# HTTPS et HSTS 
 SECURE_SSL_REDIRECT = DJANGO_SECURE
 SECURE_HSTS_SECONDS = 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True # False si sous domaine en HTTP
-SECURE_SSL_PRELOAD = False # True en prod si 100% HTTPS
+SECURE_HSTS_PRELOAD = False # True en prod si 100% HTTPS
 
-#Protection contre le MIME sniffing
+# Protection contre le MIME sniffing
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
 # Contrôle du header Referer
-SECURE_CONTENT_TYPE_NOSNIFF = "strict-origin-when-cross-origin"
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 
 # Protection contre le clickjacking
 X_FRAME_OPTIONS = "DENY"
+
+
+#CSP stricte : n'autorise que les ressources de notre domaine
+CONTENT_SECURITY_POLICY = {
+    "EXCLUDE_URL_PREFIXES": ["/admin"], 
+    "DIRECTIVES": {
+        "default-src": [SELF],     
+        "script-src": [SELF],          
+        "style-src": [SELF],              
+        # "img-src": [SELF, "data:"],
+    },
+}
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -53,12 +67,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "django-insecure-nq6pf3@^mc#!-s#+^7@bbvdr^gr#2a)wvgt1qs40c*ibhld0-%"
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -75,6 +83,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "csp.middleware.CSPMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
